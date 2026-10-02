@@ -2530,6 +2530,7 @@ export const ja = defineLocale({
       cron: 'スケジュール済みジョブ'
     },
     searchAria: 'セッションを検索',
+    navAria: 'サイドバーのナビゲーション',
     searchPlaceholder: 'セッションを検索…',
     clearSearch: '検索をクリア',
     noMatch: query => `"${query}" に一致するセッションがありません。`,

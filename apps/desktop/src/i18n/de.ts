@@ -3984,6 +3984,7 @@ export const deOverrides = {
       cron: 'Geplante Jobs'
     },
     searchAria: 'Sessions durchsuchen',
+    navAria: 'Seitenleisten-Navigation',
     searchPlaceholder: 'Sessions durchsuchen…',
     clearSearch: 'Suche löschen',
     noMatch: query => `Keine Sessions passen zu “${query}”.`,

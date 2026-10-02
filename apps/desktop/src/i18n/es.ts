@@ -3976,6 +3976,7 @@ export const esOverrides = {
       cron: 'Tareas programadas'
     },
     searchAria: 'Buscar sesiones',
+    navAria: 'Navegación lateral',
     searchPlaceholder: 'Buscar sesiones…',
     clearSearch: 'Limpiar búsqueda',
     noMatch: query => `Ninguna sesión coincide con “${query}”.`,

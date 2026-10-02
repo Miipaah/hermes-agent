@@ -3996,6 +3996,7 @@ export const frOverrides = {
       cron: 'Tâches planifiées'
     },
     searchAria: 'Rechercher des sessions',
+    navAria: 'Navigation latérale',
     searchPlaceholder: 'Rechercher des sessions…',
     clearSearch: 'Effacer la recherche',
     noMatch: query => `Aucune session ne correspond à « ${query} ».`,

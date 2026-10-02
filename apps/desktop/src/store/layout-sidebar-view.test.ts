@@ -49,6 +49,20 @@ describe('the sidebar as it ships', () => {
     expect($sidebarViewCustomized.get()).toBe(true)
   })
 
+  it('opens in the project tree, and reset puts that back', () => {
+    expect($sidebarGrouping.get()).toBe('project')
+    expect($sidebarViewCustomized.get()).toBe(false)
+
+    setSidebarGrouping('date')
+
+    expect($sidebarGrouping.get()).toBe('date')
+    expect($sidebarViewCustomized.get()).toBe(true)
+
+    resetSidebarView()
+
+    expect($sidebarGrouping.get()).toBe('project')
+  })
+
   it('is what reset puts back — every knob, not just the filters', () => {
     setSidebarGrouping('project')
     setSidebarOrdering('cost')
@@ -58,7 +72,7 @@ describe('the sidebar as it ships', () => {
 
     resetSidebarView()
 
-    expect($sidebarGrouping.get()).toBe('date')
+    expect($sidebarGrouping.get()).toBe('project')
     expect($sidebarOrdering.get()).toBe('updated')
     expect($sidebarRowMeta.get()).toEqual(['preview', 'updated'])
     expect($sidebarViewCustomized.get()).toBe(false)
@@ -82,7 +96,7 @@ describe('the sidebar as it ships', () => {
     resetSidebarView()
     $showAllProfiles.set(false)
 
-    expect($sidebarGrouping.get()).toBe('date')
+    expect($sidebarGrouping.get()).toBe('project')
   })
 
   it('turns all-profiles on when the user groups by profile, since that is the ask', () => {

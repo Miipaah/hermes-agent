@@ -2721,6 +2721,7 @@ export const ru = defineLocale({
       cron: 'Запланированные задачи'
     },
     searchAria: 'Поиск сеансов',
+    navAria: 'Навигация по боковой панели',
     searchPlaceholder: 'Поиск сеансов…',
     clearSearch: 'Очистить поиск',
     noMatch: query => `Нет сеансов по запросу «${query}».`,

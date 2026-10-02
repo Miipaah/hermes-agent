@@ -3605,6 +3605,7 @@ export const en: Translations = {
       cron: 'Scheduled jobs'
     },
     searchAria: 'Search sessions',
+    navAria: 'Sidebar navigation',
     searchPlaceholder: 'Search sessions…',
     clearSearch: 'Clear search',
     noMatch: query => `No sessions match “${query}”.`,

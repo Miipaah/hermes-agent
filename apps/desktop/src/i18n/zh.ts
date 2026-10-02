@@ -3381,6 +3381,7 @@ export const zh = defineLocale({
       cron: '定时任务'
     },
     searchAria: '搜索会话',
+    navAria: '侧边栏导航',
     searchPlaceholder: '搜索会话…',
     clearSearch: '清除搜索',
     noMatch: query => `没有会话匹配"${query}"。`,

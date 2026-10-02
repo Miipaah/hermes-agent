@@ -3030,6 +3030,7 @@ export interface Translations {
     profileRail: string
     nav: Record<string, string>
     searchAria: string
+    navAria: string
     searchPlaceholder: string
     clearSearch: string
     noMatch: (query: string) => string

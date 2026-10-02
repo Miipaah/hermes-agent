@@ -2152,6 +2152,7 @@ export const ar = defineLocale({
       cron: 'المهام المجدولة'
     },
     searchAria: 'البحث في الجلسات',
+    navAria: 'التنقل في الشريط الجانبي',
     searchPlaceholder: 'البحث في الجلسات...',
     clearSearch: 'مسح البحث',
     noMatch: query => `لا توجد جلسات تطابق "${query}"`,

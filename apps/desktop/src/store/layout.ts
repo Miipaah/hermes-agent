@@ -252,7 +252,13 @@ export const $sidebarMessagingOpenIds = persistentAtom(
 // workspace's choice) — the "sidebar forgets my grouping every time I switch
 // workspaces" bug. The flat key keeps its historical name so an existing
 // choice survives the update.
-const $sidebarFlatAgentsGrouped = persistentAtom(SIDEBAR_AGENTS_GROUPED_STORAGE_KEY, false, Codecs.bool)
+//
+// It ships ON: the sidebar opens grouped by project (project -> repo ->
+// worktree lanes), which is the view that answers "what am I working on".
+// `date` buckets stay one keystroke away (⌥⌘G, the filter menu, or leaving the
+// project tree); an explicit user choice in either direction persists over
+// this default.
+const $sidebarFlatAgentsGrouped = persistentAtom(SIDEBAR_AGENTS_GROUPED_STORAGE_KEY, true, Codecs.bool)
 
 const $sidebarAllProfilesAgentsGrouped = persistentAtom(
   SIDEBAR_ALL_PROFILES_AGENTS_GROUPED_STORAGE_KEY,
@@ -324,7 +330,21 @@ const $sidebarAllProfilesGrouping = persistentAtom<SidebarGrouping>(
 // The sidebar as it ships. Declared once so the atoms below, "Reset to
 // defaults" and the "has this view been customized?" check can't drift apart —
 // they used to inline the same literals in three places.
-const SIDEBAR_DEFAULT_GROUPING: SidebarGrouping = 'date'
+/** The grouping the sidebar ships in. The project tree is the default: the
+ *  sidebar opens answering "what am I working on". `project` is reported by
+ *  `$sidebarGrouping` from the scope's own flag rather than stored in a
+ *  grouping atom (see `setSidebarGrouping`). */
+const SIDEBAR_DEFAULT_GROUPING: SidebarGrouping = 'project'
+/** The grouping a scope falls back to once the user leaves the project tree —
+ *  `project` is not a storable value in either grouping atom. */
+const SIDEBAR_FALLBACK_GROUPING: SidebarGrouping = 'date'
+/** The all-profiles scope ships FLAT while the workspace scope ships the project
+ *  tree (its grouping atom cannot hold `project`), so "is this view customized?"
+ *  has to compare against the scope's own shipped grouping. */
+const SIDEBAR_ALL_PROFILES_DEFAULT_GROUPING: SidebarGrouping = 'date'
+/** The same default in the flag form the atoms actually store. Derived, so the
+ *  shipped view and the "is this customized?" check cannot disagree. */
+const SIDEBAR_DEFAULT_AGENTS_GROUPED = SIDEBAR_DEFAULT_GROUPING === 'project'
 const SIDEBAR_DEFAULT_ORDERING: SidebarOrdering = 'updated'
 const SIDEBAR_DEFAULT_ROW_META: SidebarRowMeta[] = ['preview', 'updated']
 
@@ -426,14 +446,15 @@ export const $sidebarFiltersActive: ReadableAtom<boolean> = computed(
 export const $sidebarViewCustomized: ReadableAtom<boolean> = computed(
   [
     $sidebarGrouping,
+    $showAllProfiles,
     $sidebarOrdering,
     $sidebarRowMeta,
     $sidebarCardRows,
     $sidebarShowAllSessions,
     $sidebarFiltersActive
   ],
-  (grouping, ordering, rowMeta, cardRows, showAllSessions, filtersActive) =>
-    grouping !== SIDEBAR_DEFAULT_GROUPING ||
+  (grouping, showAll, ordering, rowMeta, cardRows, showAllSessions, filtersActive) =>
+    grouping !== (showAll ? SIDEBAR_ALL_PROFILES_DEFAULT_GROUPING : SIDEBAR_DEFAULT_GROUPING) ||
     ordering !== SIDEBAR_DEFAULT_ORDERING ||
     !sameRowMeta(rowMeta, SIDEBAR_DEFAULT_ROW_META) ||
     cardRows ||
@@ -840,9 +861,12 @@ export function resetSidebarView() {
   // Both scopes, not just the one on screen: each keeps its own grouping (and
   // its own Project flag), so a reset that left the other customized would
   // hand it back on the next flip.
-  $sidebarFlatGrouping.set(SIDEBAR_DEFAULT_GROUPING)
-  $sidebarAllProfilesGrouping.set(SIDEBAR_DEFAULT_GROUPING)
-  $sidebarFlatAgentsGrouped.set(false)
+  $sidebarFlatGrouping.set(SIDEBAR_FALLBACK_GROUPING)
+  $sidebarAllProfilesGrouping.set(SIDEBAR_FALLBACK_GROUPING)
+  // The shipped default for the workspace scope is the project tree, so a reset
+  // lands there — not on `false`, which would hand back the date buckets the
+  // default no longer is. The all-profiles scope keeps shipping flat.
+  $sidebarFlatAgentsGrouped.set(SIDEBAR_DEFAULT_AGENTS_GROUPED)
   $sidebarAllProfilesAgentsGrouped.set(false)
   setSidebarOrdering(SIDEBAR_DEFAULT_ORDERING)
   $sidebarRowMeta.set(SIDEBAR_DEFAULT_ROW_META)
